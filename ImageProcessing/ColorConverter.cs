@@ -2,6 +2,9 @@ using System.Drawing;
 
 namespace ImageProcessing
 {
+    /// <summary>
+    /// Class with multiple color space transformations
+    /// </summary>
     public class ColorConverter
     {
         private const float Wr = 0.299f;

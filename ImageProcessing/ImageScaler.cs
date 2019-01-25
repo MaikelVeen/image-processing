@@ -3,7 +3,10 @@ using System.Drawing;
 
 namespace ImageProcessing
 {
-    public class ImageScaler
+    /// <summary>
+    /// Scaling and interpolation implementation
+    /// </summary>
+    public static class ImageScaler
     {
         public delegate Color InterpolationMethod(Color[,] image, float x, float y, float factor = 1.0f);
 

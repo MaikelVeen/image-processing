@@ -44,8 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Centroid.cs" />
+    <Compile Include="ClusterElement.cs" />
     <Compile Include="ColorConverter.cs" />
     <Compile Include="ImageScaler.cs" />
+    <Compile Include="ImageSegmenter.cs" />
     <Compile Include="OmniUnwarper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
