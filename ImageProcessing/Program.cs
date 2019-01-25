@@ -9,10 +9,19 @@ namespace ImageProcessing
         static void Main(string[] args)
         {
             //string path = args[0]; // right click template -> properties -> Debug -> command line arguments -> "../../../images/tulips.png"
-            string path = @"../../../images/forest.jpg";
-            Color[,] image = ImageViewer.LoadImage(path);
+            const string imagesForestJpg = @"../../../images/forest.jpg";
+            const string omni1Jpg = @"../../../images/omni1.jpg";
+            const string omni2Jpg = @"../../../images/omni2.jpg";
+            const string omni3Jpg = @"../../../images/omni3.jpg";
+
+            Color[,] image = ImageViewer.LoadImage(imagesForestJpg);
+            Color[,] omniImage1 = ImageViewer.LoadImage(omni1Jpg);
+            Color[,] omniImage2 = ImageViewer.LoadImage(omni2Jpg);
+            Color[,] omniImage3 = ImageViewer.LoadImage(omni3Jpg);
 
             #region Assignment 1
+
+/*
 
             ColorConverter colorConverter = new ColorConverter();
 
@@ -31,28 +40,40 @@ namespace ImageProcessing
             // Display the results
             ImageViewer.DrawImagePair(image, imageConvertedBack);
             ImageViewer.DrawImagePair(image, greyscaleImage);
-            ImageViewer.DrawImagePair(image, greyscaleImageYuv);
+            ImageViewer.DrawImagePair(image, greyscaleImageYuv);*/
 
             #endregion
 
 
             #region Assignment 2
 
-            ImageResizer imageResizer = new ImageResizer();
-            
             // Resize images using nearest neighbour interpolation
-            Color[,] scaledUpImageNN = imageResizer.Scale(imageResizer.NearestNeighbour, image, 2.0f);
-            Color[,] scaledDownImageNN = imageResizer.Scale(imageResizer.NearestNeighbour, image, .25f);
+            Color[,] scaledUpImageNN = ImageScaler.Scale(ImageScaler.NearestNeighbour, image, 2.0f);
+            Color[,] scaledDownImageNN = ImageScaler.Scale(ImageScaler.NearestNeighbour, image, .25f);
 
             // Resize images using bilinear interpolation
-            Color[,] scaledUpImageB = imageResizer.Scale(imageResizer.Bilinear, image, 2.0f);
-            Color[,] scaledDownImageB = imageResizer.Scale(imageResizer.Bilinear, image, .25f);
+            Color[,] scaledUpImageB = ImageScaler.Scale(ImageScaler.Bilinear, image, 2.0f);
+            Color[,] scaledDownImageB = ImageScaler.Scale(ImageScaler.Bilinear, image, .25f);
 
             // Display the results
             ImageViewer.DrawImagePair(image, scaledUpImageNN);
             ImageViewer.DrawImagePair(image, scaledUpImageB);
-            ImageViewer.DrawImagePair(image, scaledUpImageNN);
-            ImageViewer.DrawImagePair(image, scaledUpImageB);
+            ImageViewer.DrawImagePair(image, scaledDownImageNN);
+            ImageViewer.DrawImagePair(image, scaledDownImageB);
+
+            #endregion
+
+            #region Assignment 4
+
+            // Unwarp and display
+            Color[,] perspective1 = OmniUnwarper.Unwarp(omniImage1, 330, 240, 16, 236);
+            ImageViewer.DrawImage(perspective1);
+
+            Color[,] perspective2 = OmniUnwarper.Unwarp(omniImage2, 240, 231, 81, 232);
+            ImageViewer.DrawImage(perspective2);
+
+            Color[,] perspective3 = OmniUnwarper.Unwarp(omniImage3, 312, 239, 35, 227);
+            ImageViewer.DrawImage(perspective3);
 
             #endregion
         }
