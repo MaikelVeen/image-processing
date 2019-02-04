@@ -19,8 +19,8 @@ namespace ImageProcessing
         /// <returns>Scaled image</returns>
         public static Color[,] Scale(InterpolationMethod im, Color[,] image, float scaleFactor)
         {
-            int width = (int) Math.Ceiling(image.GetLength(0) * scaleFactor);
-            int height = (int) Math.Ceiling(image.GetLength(1) * scaleFactor);
+            int width = (int) Math.Ceiling(image.GetUpperBound(0) * scaleFactor);
+            int height = (int) Math.Ceiling(image.GetUpperBound(1) * scaleFactor);
 
             Color[,] scaledImage = new Color[width, height];
             for (int x = 0; x < scaledImage.GetLength(0) - 1; x++)

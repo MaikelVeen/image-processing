@@ -52,25 +52,25 @@ namespace ImageProcessing
             #region Assignment 2
 
             // Resize images using nearest neighbour interpolation
-            Color[,] scaledUpImageNN = ImageScaler.Scale(ImageScaler.NearestNeighbour, forestImage, 2.0f);
-            Color[,] scaledDownImageNN = ImageScaler.Scale(ImageScaler.NearestNeighbour, forestImage, .25f);
+            Color[,] scaledUpImageNN = ImageScaler.Scale(ImageScaler.NearestNeighbour, baboon, 5.0f);
+            Color[,] scaledDownImageNN = ImageScaler.Scale(ImageScaler.NearestNeighbour, baboon, .125f);
 
             // Resize images using bilinear interpolation
-            Color[,] scaledUpImageB = ImageScaler.Scale(ImageScaler.Bilinear, forestImage, 2.0f);
-            Color[,] scaledDownImageB = ImageScaler.Scale(ImageScaler.Bilinear, forestImage, .25f);
+            Color[,] scaledUpImageB = ImageScaler.Scale(ImageScaler.Bilinear, baboon, 5.0f);
+            Color[,] scaledDownImageB = ImageScaler.Scale(ImageScaler.Bilinear, baboon, .125f);
 
             // Display the results
             Console.WriteLine("Showing upscaling using nearest neighbour interpolation");
-            ImageViewer.DrawImagePair(forestImage, scaledUpImageNN);
-
-            Console.WriteLine("Showing upscaling using bilinear interpolation");
-            ImageViewer.DrawImagePair(forestImage, scaledUpImageB);
+            ImageViewer.DrawImagePair(baboon, scaledUpImageNN);
 
             Console.WriteLine("Showing downscaling using nearest neighbour interpolation");
-            ImageViewer.DrawImagePair(forestImage, scaledDownImageNN);
+            ImageViewer.DrawImagePair(baboon, scaledDownImageNN);
+            
+            Console.WriteLine("Showing upscaling using bilinear interpolation");
+            ImageViewer.DrawImagePair(baboon, scaledUpImageB);
 
             Console.WriteLine("Showing downscaling using nearest bilinear interpolation");
-            ImageViewer.DrawImagePair(forestImage, scaledDownImageB);
+            ImageViewer.DrawImagePair(baboon, scaledDownImageB); 
 
             #endregion
 

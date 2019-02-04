@@ -22,10 +22,12 @@ namespace ImageProcessing
 
             // Generate
             List<Centroid> centroids = GetRandomCentroids(elements, clusterAmount);
-
+            Console.WriteLine($"Starting K-means segmentation {DateTime.Now}");
+            
             // Iterative step -> do this for max iterations
             for (int i = 0; i < maxIterations; i++)
             {
+                Console.WriteLine($"Running iteration {i}");
                 for (int x = 0; x < elements.GetLength(0); x++)
                 {
                     for (int y = 0; y < elements.GetLength(1); y++)
