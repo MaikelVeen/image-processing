@@ -27,7 +27,7 @@ namespace ImageProcessing
             Color[,] aurora = ImageViewer.LoadImage(auroraJpg);
             Color[,] flowers = ImageViewer.LoadImage(flowersPng);
 
-            #region Assignment 1
+           /* #region Assignment 1
 
             ColorConverter colorConverter = new ColorConverter();
 
@@ -48,52 +48,48 @@ namespace ImageProcessing
             Color[,] greyscaleImageYuv = colorConverter.ConvertYuvToRgbImage(greyscaleYuv);
             ImageViewer.DrawImagePair(forestImage, greyscaleImageYuv);
 
-            #endregion
+            #endregion*/
 
 
             #region Assignment 2
 
             // Resize images using nearest neighbour interpolation
-            Color[,] scaledUpImageNN = ImageScaler.Scale(ImageScaler.NearestNeighbour, baboon, 5.0f);
-            Color[,] scaledDownImageNN = ImageScaler.Scale(ImageScaler.NearestNeighbour, baboon, .125f);
-
-            // Resize images using bilinear interpolation
-            Color[,] scaledUpImageB = ImageScaler.Scale(ImageScaler.Bilinear, baboon, 5.0f);
-            Color[,] scaledDownImageB = ImageScaler.Scale(ImageScaler.Bilinear, baboon, .125f);
-
-            // Display the results
-            Console.WriteLine("Showing upscaling using nearest neighbour interpolation");
-            ImageViewer.DrawImagePair(baboon, scaledUpImageNN);
+            Color[,] scaledDownImageNN = ImageScaler.Scale(ImageScaler.NearestNeighbour, baboon, .2f);
+            Color[,] scaledUpImageNN = ImageScaler.Scale(ImageScaler.NearestNeighbour, scaledDownImageNN, 5.0f);
 
             Console.WriteLine("Showing downscaling using nearest neighbour interpolation");
             ImageViewer.DrawImagePair(baboon, scaledDownImageNN);
-            
-            Console.WriteLine("Showing upscaling using bilinear interpolation");
-            ImageViewer.DrawImagePair(baboon, scaledUpImageB);
 
-            Console.WriteLine("Showing downscaling using nearest bilinear interpolation");
-            ImageViewer.DrawImagePair(baboon, scaledDownImageB); 
+            Console.WriteLine("Showing upscaling using nearest neighbour interpolation");
+            ImageViewer.DrawImagePair(scaledDownImageNN, scaledUpImageNN);
 
-            #endregion
+            // Resize images using bilinear interpolation
+            Color[,] scaledDownImageB = ImageScaler.Scale(ImageScaler.Bilinear, baboon, .2f);
+            Color[,] scaledUpImageB = ImageScaler.Scale(ImageScaler.Bilinear, scaledDownImageB, 5.0f);
+
+            Console.WriteLine("Showing downscaling using bilinear interpolation");
+            ImageViewer.DrawImagePair(baboon, scaledDownImageB);
+
+            Console.WriteLine("Showing upscaling using nearest bilinear interpolation");
+            ImageViewer.DrawImagePair(scaledDownImageB, scaledUpImageB);
+
+            #endregion*/
 
             #region Assignment 3
             
-            Color[,] segmentedImage = ImageSegmenter.Segment(flowers, 3);
-            ImageViewer.DrawImagePair(flowers, segmentedImage);
-            // Segment image and draw in pair with original
-       
             Console.WriteLine("Showing image segmentation using k-means clustering with 2 clusters");
-            Color[,] segmentedImage2 = ImageSegmenter.Segment(tulips, 2);
+            Color[,] segmentedImage = ImageSegmenter.Segment(flowers, 2);
+            ImageViewer.DrawImagePair(flowers, segmentedImage);
+   
+            Console.WriteLine("Showing image segmentation using k-means clustering with 8 clusters");
+            Color[,] segmentedImage2 = ImageSegmenter.Segment(tulips, 8);
             ImageViewer.DrawImagePair(tulips, segmentedImage2);
 
             Console.WriteLine("Showing image segmentation using k-means clustering with 6 clusters");
-            Color[,] segmentedImage3 = ImageSegmenter.Segment(baboon, 6);
+            Color[,] segmentedImage3 = ImageSegmenter.Segment(baboon, 4);
             ImageViewer.DrawImagePair(baboon, segmentedImage3);
 
-            Console.WriteLine("Showing image segmentation using k-means clustering with 14 clusters");
-            Color[,] segmentedImage4 = ImageSegmenter.Segment(aurora, 14);
-            ImageViewer.DrawImagePair(aurora, segmentedImage4);
-
+          
             #endregion
 
             #region Assignment 4
@@ -101,15 +97,15 @@ namespace ImageProcessing
             // Unwarp and display
             Console.WriteLine("Showing omnidirectional image unwarping of image 1");
             Color[,] perspective1 = OmniUnwarper.Unwarp(omniImage1, 330, 240, 16, 236);
-            ImageViewer.DrawImagePair(omniImage1,perspective1);
+            ImageViewer.DrawImagePair(omniImage1, perspective1);
 
             Console.WriteLine("Showing omnidirectional image unwarping of image 2");
             Color[,] perspective2 = OmniUnwarper.Unwarp(omniImage2, 240, 231, 81, 232);
-            ImageViewer.DrawImagePair(omniImage2,perspective2);
+            ImageViewer.DrawImagePair(omniImage2, perspective2);
 
             Console.WriteLine("Showing omnidirectional image unwarping of image 3");
             Color[,] perspective3 = OmniUnwarper.Unwarp(omniImage3, 312, 239, 35, 227);
-            ImageViewer.DrawImagePair(omniImage3,perspective3);
+            ImageViewer.DrawImagePair(omniImage3, perspective3);
 
             #endregion
         }
