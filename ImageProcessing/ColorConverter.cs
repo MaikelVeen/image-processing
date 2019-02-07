@@ -90,7 +90,7 @@ namespace ImageProcessing
 
         private Color RgbToGreyscale(Color rgbColor)
         {
-            int average = (rgbColor.A + rgbColor.G + rgbColor.B) / 3;
+            int average = (rgbColor.R + rgbColor.G + rgbColor.B) / 3;
             return Color.FromArgb(255, average, average, average);
         }
 
