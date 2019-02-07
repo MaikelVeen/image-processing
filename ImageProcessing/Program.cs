@@ -14,6 +14,7 @@ namespace ImageProcessing
         const string tulipsPng = @"../../../images/tulips.png";
         const string baboonPng = @"../../../images/baboon.png";
         const string auroraJpg = @"../../../images/aurora.jpg";
+        const string flowersPng = @"../../../images/flower.png";
 
         private static void Main(string[] args)
         {
@@ -24,6 +25,7 @@ namespace ImageProcessing
             Color[,] tulips = ImageViewer.LoadImage(tulipsPng);
             Color[,] baboon = ImageViewer.LoadImage(baboonPng);
             Color[,] aurora = ImageViewer.LoadImage(auroraJpg);
+            Color[,] flowers = ImageViewer.LoadImage(flowersPng);
 
             #region Assignment 1
 
@@ -75,12 +77,11 @@ namespace ImageProcessing
             #endregion
 
             #region Assignment 3
-
+            
+            Color[,] segmentedImage = ImageSegmenter.Segment(flowers, 3);
+            ImageViewer.DrawImagePair(flowers, segmentedImage);
             // Segment image and draw in pair with original
-            Console.WriteLine("Showing image segmentation using k-means clustering with 4 clusters");
-            Color[,] segmentedImage = ImageSegmenter.Segment(forestImage, 4);
-            ImageViewer.DrawImagePair(forestImage, segmentedImage);
-
+       
             Console.WriteLine("Showing image segmentation using k-means clustering with 2 clusters");
             Color[,] segmentedImage2 = ImageSegmenter.Segment(tulips, 2);
             ImageViewer.DrawImagePair(tulips, segmentedImage2);
@@ -100,15 +101,15 @@ namespace ImageProcessing
             // Unwarp and display
             Console.WriteLine("Showing omnidirectional image unwarping of image 1");
             Color[,] perspective1 = OmniUnwarper.Unwarp(omniImage1, 330, 240, 16, 236);
-            ImageViewer.DrawImage(perspective1);
+            ImageViewer.DrawImagePair(omniImage1,perspective1);
 
             Console.WriteLine("Showing omnidirectional image unwarping of image 2");
             Color[,] perspective2 = OmniUnwarper.Unwarp(omniImage2, 240, 231, 81, 232);
-            ImageViewer.DrawImage(perspective2);
+            ImageViewer.DrawImagePair(omniImage2,perspective2);
 
             Console.WriteLine("Showing omnidirectional image unwarping of image 3");
             Color[,] perspective3 = OmniUnwarper.Unwarp(omniImage3, 312, 239, 35, 227);
-            ImageViewer.DrawImage(perspective3);
+            ImageViewer.DrawImagePair(omniImage3,perspective3);
 
             #endregion
         }

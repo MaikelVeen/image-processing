@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Numerics;
 
 namespace ImageProcessing
@@ -8,124 +10,124 @@ namespace ImageProcessing
     public static class ImageSegmenter
     {
         /// <summary>
-        /// Segments the image into a number of colors based on the k-means clustering
-        /// algorithms
+        /// Segments an image to a given amount of colors
         /// </summary>
-        /// <param name="image"></param>
-        /// <param name="clusterAmount"></param>
-        /// <param name="maxIterations"></param>
-        /// <returns></returns>
-        public static Color[,] Segment(Color[,] image, int clusterAmount, int maxIterations = 10)
+        /// <param name="image">The image to segment</param>
+        /// <param name="clusterAmount">The amount of clusters</param>
+        /// <param name="maxIterations">Maximum iteration threshold</param>
+        /// <returns>Segmented color matrix</returns>
+        public static Color[,] Segment(Color[,] image, int clusterAmount, int maxIterations = 200)
         {
-            // Convert colors to cluster elements
-            ClusterElement[,] elements = ConvertColorToClusterElements(image);
+            // Initialization of algorithm
+            ClusterElement[,] elements = GetClusterElements(image);
+            Centroid[] centroids = GetRandomCentroids(elements, clusterAmount).ToArray();
+            List<Centroid> finishedCentroid = new List<Centroid>();
 
-            // Generate
-            List<Centroid> centroids = GetRandomCentroids(elements, clusterAmount);
-            Console.WriteLine($"Starting K-means segmentation {DateTime.Now}");
-            
-            // Iterative step -> do this for max iterations
-            for (int i = 0; i < maxIterations; i++)
+            // Start stopwatch
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            Console.WriteLine("Starting K-means segmentation");
+
+            // Main iteration loop
+            for (int i = 0; i != maxIterations; i++)
             {
+                // Reset elements of centroid at start of every iteration
+                foreach (Centroid centroid in centroids)
+                {
+                    centroid.elements.Clear();
+                }
+
                 Console.WriteLine($"Running iteration {i}");
                 for (int x = 0; x < elements.GetLength(0); x++)
                 {
                     for (int y = 0; y < elements.GetLength(1); y++)
                     {
-                        // Calculate which centroid is nearest
-                        float distanceToNearestCentroid = int.MaxValue;
-                        foreach (Centroid centroid in centroids)
+                        // Get the position of current element
+                        Vector3 currentElement = elements[x, y].Position;
+                        float minimumDistance = float.MaxValue;
+                        int indexClosestCentroid = 0;
+
+                        // Determine which centroid is the nearest
+                        for (int j = 0; j < centroids.Length; j++)
                         {
-                            float distance =
-                                CalculateDistanceToCentroid(elements[x, y].Position, centroid.Position);
-                            if (!(distanceToNearestCentroid > distance)) continue;
+                            float distance = CalculateSquaredDistance(currentElement, centroids[j].Position);
+                            if (!(minimumDistance > distance)) continue;
 
-                            // Set centroid of element to new one if that one is nearer
-                            elements[x, y].Centroid = centroid;
-
-                            // Update nearest distance for next iteration step
-                            distanceToNearestCentroid = distance;
+                            minimumDistance = distance;
+                            indexClosestCentroid = j;
                         }
 
-                        // Add element to centroid elements list
-                        elements[x, y].Centroid.clusterElements.Add(elements[x, y].Position);
+                        centroids[indexClosestCentroid].elements.Add(currentElement);
+                        elements[x, y].Centroid = centroids[indexClosestCentroid];
                     }
                 }
 
-                // Recalculate the position of each centroid
+                // Recalculate positions of centroids
+                finishedCentroid.Clear();
                 foreach (Centroid centroid in centroids)
                 {
-                    centroid.RecalculatePosition();
+                    bool finished = centroid.RecalculatePosition();
+                    if (finished)
+                    {
+                        finishedCentroid.Add(centroid);
+                    }
+                }
+
+                // Check if convergence is reached
+                Console.WriteLine($"Iteration {i} finished");
+                if (finishedCentroid.Count == centroids.Length)
+                {
+                    break;
                 }
             }
 
-            return ConvertClusterElementsToColors(elements);
+            stopwatch.Stop();
+            Console.WriteLine($"Finished k-means image clustering in {stopwatch.ElapsedMilliseconds} ms");
+
+            return ConvertToImage(elements);
         }
-        
-        /// <summary>
-        /// Calculate distance between two vectors using
-        /// pythagoras theorem
-        /// </summary>
-        /// <param name="element"></param>
-        /// <param name="centroid"></param>
-        /// <returns></returns>
-        private static float CalculateDistanceToCentroid(Vector3 element, Vector3 centroid)
+
+        private static float CalculateSquaredDistance(Vector3 element, Vector3 element2)
         {
-            return (float) Math.Sqrt(Math.Pow(element.X - centroid.X, 2) + Math.Pow(element.Y - centroid.Y, 2));
+            float x = element2.X - element.X;
+            float y = element2.Y - element.Y;
+            float z = element2.Z - element.Z;
+            return x * x + y * y + z * z;
         }
-        
-        /// <summary>
-        /// Returns k random centroids for initialization
-        /// </summary>
-        /// <param name="clusterElements"></param>
-        /// <param name="k"></param>
-        /// <returns></returns>
-        private static List<Centroid> GetRandomCentroids(ClusterElement[,] clusterElements, int k)
+
+        private static IEnumerable<Centroid> GetRandomCentroids(ClusterElement[,] elements, int k)
         {
-            List<Vector3> vector3s = new List<Vector3>();
+            // Initialize new list of Vectors 
+            List<Centroid> centroids = new List<Centroid>();
             Random random = new Random();
+
+            // Generate up to k amount of centroids
             for (int i = 0; i < k; i++)
             {
-                vector3s.Add(clusterElements[random.Next(0, clusterElements.GetLength(0)),
-                    random.Next(0, clusterElements.GetLength(1))].Position);
-            }
-
-            List<Centroid> centroids = new List<Centroid>();
-            foreach (Vector3 vector3 in vector3s)
-            {
-                centroids.Add(new Centroid(vector3));
+                Vector3 randomPosition = elements[random.Next(0, elements.GetLength(0)),
+                    random.Next(0, elements.GetLength(1))].Position;
+                centroids.Add(new Centroid(randomPosition));
             }
 
             return centroids;
         }
-        
-        /// <summary>
-        /// Converts a color matrix to cluster element matrix
-        /// </summary>
-        /// <param name="colors"></param>
-        /// <returns></returns>
-        private static ClusterElement[,] ConvertColorToClusterElements(Color[,] colors)
+
+        private static ClusterElement[,] GetClusterElements(Color[,] image)
         {
-            ClusterElement[,] elements = new ClusterElement[colors.GetLength(0), colors.GetLength(1)];
-            for (int x = 0; x < colors.GetLength(0); x++)
+            ClusterElement[,] elements = new ClusterElement[image.GetLength(0), image.GetLength(1)];
+            for (int x = 0; x < image.GetLength(0); x++)
             {
-                for (int y = 0; y < colors.GetLength(1); y++)
+                for (int y = 0; y < image.GetLength(1); y++)
                 {
-                    elements[x, y] = new ClusterElement(new Vector3(colors[x, y].R, colors[x, y].G, colors[x, y].B));
+                    elements[x, y] = new ClusterElement(new Vector3(image[x, y].R, image[x, y].G, image[x, y].B));
                 }
             }
 
             return elements;
         }
-        
-        /// <summary>
-        /// Converts a cluster element matrix to color matrix
-        /// last step in k-means algorithm
-        /// color will be set to the value of the centroid the element belongs to
-        /// </summary>
-        /// <param name="elements"></param>
-        /// <returns></returns>
-        private static Color[,] ConvertClusterElementsToColors(ClusterElement[,] elements)
+
+
+        private static Color[,] ConvertToImage(ClusterElement[,] elements)
         {
             Color[,] segmentedImage = new Color[elements.GetLength(0), elements.GetLength(1)];
             for (int x = 0; x < elements.GetLength(0); x++)

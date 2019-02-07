@@ -15,11 +15,10 @@ namespace ImageProcessing
         /// <summary>
         /// The 'value' of the element
         /// </summary>
-        public Vector3 Position { get; set; }
+        public Vector3 Position { get; }
 
         /// <summary>
         /// Which centroid the element belongs to in the current iteration
-        /// Initially this value is null
         /// </summary>
         public Centroid Centroid { get; set; }
     }
