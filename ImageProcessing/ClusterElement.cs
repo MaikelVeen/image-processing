@@ -15,7 +15,7 @@ namespace ImageProcessing
         /// <summary>
         /// The 'value' of the element
         /// </summary>
-        public Vector3 Position { get; }
+        public Vector3 Position { get; private set; }
 
         /// <summary>
         /// Which centroid the element belongs to in the current iteration

@@ -119,6 +119,6 @@ namespace ImageProcessing
             return ExecuteColorSpaceTransformation(yuvColors, YuvToGreyscale);
         }
 
-        private float NormalizeRgb(float value) => value / 255;
+        private static float NormalizeRgb(float value) => value / 255;
     }
 }

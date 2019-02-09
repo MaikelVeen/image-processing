@@ -34,7 +34,7 @@ namespace ImageProcessing
                 // Reset elements of centroid at start of every iteration
                 foreach (Centroid centroid in centroids)
                 {
-                    centroid.elements.Clear();
+                    centroid.Elements.Clear();
                 }
 
                 Console.WriteLine($"Running iteration {i}");
@@ -57,7 +57,7 @@ namespace ImageProcessing
                             indexClosestCentroid = j;
                         }
 
-                        centroids[indexClosestCentroid].elements.Add(currentElement);
+                        centroids[indexClosestCentroid].Elements.Add(currentElement);
                         elements[x, y].Centroid = centroids[indexClosestCentroid];
                     }
                 }

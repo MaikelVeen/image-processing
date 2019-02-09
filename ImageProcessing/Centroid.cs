@@ -12,7 +12,7 @@ namespace ImageProcessing
         public Centroid(Vector3 position)
         {
             Position = position;
-            elements = new List<Vector3>();
+            Elements = new List<Vector3>();
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace ImageProcessing
         /// <summary>
         /// List of elements assigned to this centroid
         /// </summary>
-        public List<Vector3> elements { get; }
+        public List<Vector3> Elements { get; private set; }
 
         /// <summary>
         /// Recalculates the position of the centroid.
@@ -32,9 +32,9 @@ namespace ImageProcessing
         /// <returns></returns>
         public bool RecalculatePosition()
         {
-            int numberOfElements = elements.Count;
+            int numberOfElements = Elements.Count;
             Vector3 total = new Vector3(0, 0, 0);
-            foreach (Vector3 element in elements)
+            foreach (Vector3 element in Elements)
             {
                 total.X += element.X;
                 total.Y += element.Y;

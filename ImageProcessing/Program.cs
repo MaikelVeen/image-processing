@@ -5,29 +5,29 @@ using ImageUtilities;
 
 namespace ImageProcessing
 {
-    class Program
+    internal static class Program
     {
-        const string imagesForestJpg = @"../../../images/forest.jpg";
-        const string omni1Jpg = @"../../../images/omni1.jpg";
-        const string omni2Jpg = @"../../../images/omni2.jpg";
-        const string omni3Jpg = @"../../../images/omni3.jpg";
-        const string tulipsPng = @"../../../images/tulips.png";
-        const string baboonPng = @"../../../images/baboon.png";
-        const string auroraJpg = @"../../../images/aurora.jpg";
-        const string flowersPng = @"../../../images/flower.png";
+        private const string ImagesForestJpg = @"../../../images/forest.jpg";
+        private const string Omni1Jpg = @"../../../images/omni1.jpg";
+        private const string Omni2Jpg = @"../../../images/omni2.jpg";
+        private const string Omni3Jpg = @"../../../images/omni3.jpg";
+        private const string TulipsPng = @"../../../images/tulips.png";
+        private const string BaboonPng = @"../../../images/baboon.png";
+        private const string AuroraJpg = @"../../../images/aurora.jpg";
+        private const string FlowersPng = @"../../../images/flower.png";
 
         private static void Main(string[] args)
         {
-            Color[,] forestImage = ImageViewer.LoadImage(imagesForestJpg);
-            Color[,] omniImage1 = ImageViewer.LoadImage(omni1Jpg);
-            Color[,] omniImage2 = ImageViewer.LoadImage(omni2Jpg);
-            Color[,] omniImage3 = ImageViewer.LoadImage(omni3Jpg);
-            Color[,] tulips = ImageViewer.LoadImage(tulipsPng);
-            Color[,] baboon = ImageViewer.LoadImage(baboonPng);
-            Color[,] aurora = ImageViewer.LoadImage(auroraJpg);
-            Color[,] flowers = ImageViewer.LoadImage(flowersPng);
+            Color[,] forestImage = ImageViewer.LoadImage(ImagesForestJpg);
+            Color[,] omniImage1 = ImageViewer.LoadImage(Omni1Jpg);
+            Color[,] omniImage2 = ImageViewer.LoadImage(Omni2Jpg);
+            Color[,] omniImage3 = ImageViewer.LoadImage(Omni3Jpg);
+            Color[,] tulips = ImageViewer.LoadImage(TulipsPng);
+            Color[,] baboon = ImageViewer.LoadImage(BaboonPng);
+            Color[,] aurora = ImageViewer.LoadImage(AuroraJpg);
+            Color[,] flowers = ImageViewer.LoadImage(FlowersPng);
 
-           /* #region Assignment 1
+            #region Assignment 1
 
             ColorConverter colorConverter = new ColorConverter();
 
@@ -48,20 +48,20 @@ namespace ImageProcessing
             Color[,] greyscaleImageYuv = colorConverter.ConvertYuvToRgbImage(greyscaleYuv);
             ImageViewer.DrawImagePair(forestImage, greyscaleImageYuv);
 
-            #endregion*/
+            #endregion
 
 
             #region Assignment 2
 
             // Resize images using nearest neighbour interpolation
-            Color[,] scaledDownImageNN = ImageScaler.Scale(ImageScaler.NearestNeighbour, baboon, .2f);
-            Color[,] scaledUpImageNN = ImageScaler.Scale(ImageScaler.NearestNeighbour, scaledDownImageNN, 5.0f);
+            Color[,] scaledDownImageNn = ImageScaler.Scale(ImageScaler.NearestNeighbour, baboon, .2f);
+            Color[,] scaledUpImageNn = ImageScaler.Scale(ImageScaler.NearestNeighbour, scaledDownImageNn, 5.0f);
 
             Console.WriteLine("Showing downscaling using nearest neighbour interpolation");
-            ImageViewer.DrawImagePair(baboon, scaledDownImageNN);
+            ImageViewer.DrawImagePair(baboon, scaledDownImageNn);
 
             Console.WriteLine("Showing upscaling using nearest neighbour interpolation");
-            ImageViewer.DrawImagePair(scaledDownImageNN, scaledUpImageNN);
+            ImageViewer.DrawImagePair(scaledDownImageNn, scaledUpImageNn);
 
             // Resize images using bilinear interpolation
             Color[,] scaledDownImageB = ImageScaler.Scale(ImageScaler.Bilinear, baboon, .2f);
